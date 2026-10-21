@@ -306,8 +306,8 @@ export function Footer() {
   const t = UI[lang]
 
   const socials = [
-    { label: 'TikTok', href: 'https://www.tiktok.com/@durex', icon: 'music_note' },
-    { label: 'Facebook', href: 'https://www.facebook.com/DurexVietnam', icon: 'thumb_up' },
+    { label: 'TikTok', href: 'https://www.tiktok.com/@durex_vietnam', icon: 'music_note' },
+    { label: 'Facebook', href: 'https://facebook.com/Durex.Vietnam', icon: 'thumb_up' },
     { label: 'Instagram', href: 'https://www.instagram.com/durex', icon: 'photo_camera' },
   ]
 

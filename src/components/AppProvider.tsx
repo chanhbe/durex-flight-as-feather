@@ -96,7 +96,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       // TikTok has no web share endpoint: copy the link, then open TikTok
       void copyLink(true)
       toast(t.tiktokHint, 'content_copy')
-      window.open('https://www.tiktok.com/@durex', '_blank', 'noopener')
+      window.open('https://www.tiktok.com/@durex_vietnam', '_blank', 'noopener')
     } else if (navigator.share) {
       navigator.share({ title: share.title, url: share.url }).catch(() => {})
     } else {
