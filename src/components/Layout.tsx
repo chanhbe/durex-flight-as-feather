@@ -3,6 +3,7 @@ import { Link, NavLink, useLocation, useOutlet } from 'react-router-dom'
 import { AnimatePresence, motion, useScroll, useSpring } from 'motion/react'
 import { DurexLogo, Icon } from './ui'
 import { useApp } from './AppProvider'
+import { AgeGate } from './AgeGate'
 import { NAV, UI, type PolicyKind } from '../data/content'
 import { Feather, HeartBalloon, RoundBalloon } from './Balloons'
 import { useLang, type Lang } from '../i18n'
@@ -301,9 +302,10 @@ function BottomNav() {
 }
 
 export function Footer() {
-  const { openPolicy } = useApp()
+  const { openPolicy, openSexEd, resetAgeGate } = useApp()
   const { lang } = useLang()
   const t = UI[lang]
+  const isVi = lang === 'vi'
 
   const socials = [
     { label: 'TikTok', href: 'https://www.tiktok.com/@durex_vietnam', icon: 'music_note' },
@@ -369,10 +371,10 @@ export function Footer() {
 
         {/* Main Footer Links */}
         <div className="grid gap-10 md:grid-cols-4">
-          <div className="md:col-span-2">
+          <div>
             <DurexLogo variant="white" size="lg" />
             <p className="mt-4 max-w-sm text-body-md text-white/75 leading-relaxed">{t.footerAbout}</p>
-            <div className="mt-4 flex items-center gap-2">
+            <div className="mt-4 flex flex-wrap items-center gap-2">
               <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-white/80">
                 <Icon name="verified_user" className="text-sm text-crimson" /> Global Quality
               </span>
@@ -380,6 +382,52 @@ export function Footer() {
                 <Icon name="favorite" className="text-sm text-[#ffa6ca]" /> Better Together
               </span>
             </div>
+          </div>
+
+          {/* Sex Education & Safe Sex Hub */}
+          <div>
+            <h4 className="mb-4 text-label-sm font-extrabold tracking-wider text-[#ffa6ca] uppercase">
+              {isVi ? 'Giáo Dục Giới Tính' : 'Sex Education & Hub'}
+            </h4>
+            <ul className="space-y-2.5 text-sm">
+              <li>
+                <button
+                  onClick={() => openSexEd('condoms101')}
+                  className="group flex items-center gap-2 text-left text-white/85 transition-colors hover:text-white"
+                >
+                  <Icon name="pan_tool_alt" className="text-sm text-[#72f59e]" />
+                  <span className="group-hover:underline">{isVi ? 'Condoms 101: 4 Bước Dùng Chuẩn' : 'Condoms 101: 4 Steps'}</span>
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => openSexEd('myths')}
+                  className="group flex items-center gap-2 text-left text-white/85 transition-colors hover:text-white"
+                >
+                  <Icon name="science" className="text-sm text-[#8cc8ff]" />
+                  <span className="group-hover:underline">{isVi ? 'Giải Mã 5 Lầm Tưởng (BU Today)' : '5 Health Myths Debunked'}</span>
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => openSexEd('consent')}
+                  className="group flex items-center gap-2 text-left text-white/85 transition-colors hover:text-white"
+                >
+                  <Icon name="handshake" className="text-sm text-[#ffd166]" />
+                  <span className="group-hover:underline">{isVi ? 'Đồng Thuận F.R.I.E.S (PMC/NCBI)' : 'Consent & Boundaries (NIH)'}</span>
+                </button>
+              </li>
+              <li className="pt-2">
+                <button
+                  onClick={resetAgeGate}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-semibold text-white/70 transition-all hover:bg-white/20 hover:text-white"
+                  title={isVi ? 'Xác nhận lại độ tuổi 18+' : 'Reset age verification'}
+                >
+                  <Icon name="refresh" className="text-xs" />
+                  <span>{isVi ? 'Kiểm tra lại tuổi (18+)' : 'Re-verify Age (18+)'}</span>
+                </button>
+              </li>
+            </ul>
           </div>
 
           <div>
@@ -428,129 +476,6 @@ export function Footer() {
         </div>
       </div>
     </footer>
-  )
-}
-
-const AGE_KEY = 'durex-age-ok'
-
-function AgeGate() {
-  const { lang } = useLang()
-  const t = UI[lang]
-  const [state, setState] = useState<'ask' | 'ok' | 'blocked'>(() => {
-    try {
-      return localStorage.getItem(AGE_KEY) === '1' ? 'ok' : 'ask'
-    } catch {
-      return 'ask'
-    }
-  })
-
-  useEffect(() => {
-    if (state === 'ok') return
-    const prev = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-    return () => {
-      document.body.style.overflow = prev
-    }
-  }, [state])
-
-  const accept = () => {
-    try {
-      localStorage.setItem(AGE_KEY, '1')
-    } catch {
-      /* storage blocked */
-    }
-    setState('ok')
-  }
-
-  return (
-    <AnimatePresence>
-      {state !== 'ok' && (
-        <motion.div
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="age-title"
-          className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden p-5"
-          style={{ background: 'linear-gradient(135deg, #06192d 0%, #002d62 50%, #06192d 100%)' }}
-          initial={{ opacity: 1 }}
-          exit={{ opacity: 0, transition: { duration: 0.6 } }}
-        >
-          {/* Ambient lighting in gate */}
-          <div className="absolute top-1/4 left-1/4 h-80 w-80 rounded-full bg-crimson/20 blur-3xl animate-ambient-breathe" />
-          <div className="absolute bottom-1/4 right-1/4 h-80 w-80 rounded-full bg-[#006aff]/25 blur-3xl" />
-
-          <HeartBalloon color="pink" className="absolute top-[8%] left-[8%] w-16 animate-floating opacity-50" />
-          <HeartBalloon color="blue" className="absolute top-[16%] right-[10%] w-14 animate-floating opacity-50 [animation-delay:-2s]" />
-          <RoundBalloon color="pink" className="absolute bottom-[8%] left-[6%] w-14 animate-floating opacity-40 [animation-delay:-1s]" />
-
-          <div className="absolute top-5 right-5 z-20">
-            <LangSwitch id="gate" light />
-          </div>
-
-          <motion.div
-            initial={{ scale: 0.92, opacity: 0, y: 30 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.95, opacity: 0, y: -20 }}
-            transition={{ type: 'spring', damping: 26, stiffness: 260 }}
-            className="relative w-full max-w-md overflow-hidden rounded-[32px] border border-white/20 bg-white/10 p-8 text-center text-white shadow-2xl backdrop-blur-3xl ring-1 ring-white/30"
-          >
-            {/* Top Specular Rim */}
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent" />
-
-            <div className="flex justify-center">
-              <DurexLogo variant="white" size="lg" />
-            </div>
-
-            <AnimatePresence mode="wait">
-              {state === 'ask' ? (
-                <motion.div key="ask" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                  <div className="mx-auto mt-6 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-tr from-crimson to-[#ff3366] text-2xl font-black text-white shadow-glow-red">
-                    18+
-                  </div>
-                  <h2 id="age-title" className="mt-5 font-display text-headline-md font-extrabold tracking-tight text-white md:text-headline-lg">
-                    {t.ageTitle}
-                  </h2>
-                  <p className="mt-2.5 text-sm text-white/80 leading-relaxed">{t.ageBody}</p>
-
-                  <div className="mt-8 space-y-3">
-                    <button
-                      onClick={accept}
-                      autoFocus
-                      className="group relative w-full overflow-hidden rounded-full bg-gradient-to-r from-[#ff2a54] via-crimson to-[#ba0a12] py-4 text-label-lg font-bold tracking-wide text-white shadow-crimson transition-all duration-300 hover:brightness-110 active:scale-95"
-                    >
-                      <span className="flex items-center justify-center gap-2">
-                        {t.ageYes} <Icon name="arrow_forward" className="text-lg transition-transform group-hover:translate-x-1" />
-                      </span>
-                    </button>
-                    <button
-                      onClick={() => setState('blocked')}
-                      className="w-full rounded-full border border-white/20 bg-white/10 py-3.5 text-label-md font-semibold text-white/80 transition-all hover:bg-white/20 hover:text-white active:scale-95"
-                    >
-                      {t.ageNo}
-                    </button>
-                  </div>
-                </motion.div>
-              ) : (
-                <motion.div key="blocked" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                  <div className="mx-auto mt-6 flex h-16 w-16 items-center justify-center rounded-full bg-white/20 text-white">
-                    <Icon name="waving_hand" className="text-3xl" />
-                  </div>
-                  <h2 id="age-title" className="mt-5 font-display text-headline-md font-bold text-white">
-                    {t.ageBlockedTitle}
-                  </h2>
-                  <p className="mt-2.5 text-sm text-white/80 leading-relaxed">{t.ageBlockedBody}</p>
-                  <button
-                    onClick={() => setState('ask')}
-                    className="mt-6 inline-flex items-center gap-2 text-label-md font-bold text-[#a1c9ff] transition-colors hover:text-white hover:underline"
-                  >
-                    <Icon name="arrow_back" className="text-base" /> {t.ageBack}
-                  </button>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
   )
 }
 

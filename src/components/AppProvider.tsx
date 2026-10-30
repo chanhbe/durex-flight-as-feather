@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useMemo, useRef, useState, type ReactNode } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { CtaButton, Icon, Sheet } from './ui'
+import { AgeGate } from './AgeGate'
 import { useLang } from '../i18n'
 import {
   PACKS,
@@ -19,11 +20,15 @@ import {
 type Toast = { id: number; text: string; icon?: string }
 type ShareTarget = { title: string; url: string }
 
+export type SexEdTab = 'myths' | 'consent' | 'condoms101'
+
 type Ctx = {
   toast: (text: string, icon?: string) => void
   openBuy: (opts?: { product?: ProductId; pack?: PackId }) => void
   openShare: (target?: ShareTarget) => void
   openPolicy: (kind: PolicyKind) => void
+  openSexEd: (tab?: SexEdTab) => void
+  resetAgeGate: () => void
 }
 
 const AppCtx = createContext<Ctx | null>(null)
@@ -46,6 +51,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [share, setShare] = useState<ShareTarget | null>(null)
   const [copied, setCopied] = useState(false)
   const [policy, setPolicy] = useState<PolicyKind | null>(null)
+  const [sexEdOpen, setSexEdOpen] = useState(false)
+  const [sexEdTab, setSexEdTab] = useState<SexEdTab>('condoms101')
 
   const toast = useCallback((text: string, icon = 'check_circle') => {
     const id = ++nextId.current
@@ -66,7 +73,22 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const openPolicy = useCallback((kind: PolicyKind) => setPolicy(kind), [])
 
-  const value = useMemo(() => ({ toast, openBuy, openShare, openPolicy }), [toast, openBuy, openShare, openPolicy])
+  const openSexEd = useCallback((tab?: SexEdTab) => {
+    if (tab) setSexEdTab(tab)
+    setSexEdOpen(true)
+  }, [])
+
+  const resetAgeGate = useCallback(() => {
+    try {
+      localStorage.removeItem('durex-age-ok')
+    } catch {}
+    window.location.reload()
+  }, [])
+
+  const value = useMemo(
+    () => ({ toast, openBuy, openShare, openPolicy, openSexEd, resetAgeGate }),
+    [toast, openBuy, openShare, openPolicy, openSexEd, resetAgeGate]
+  )
   const pack = PACKS.find((p) => p.id === buyPack) ?? PACKS[1]
   const product = productById(buyProduct)
 
@@ -261,6 +283,15 @@ export function AppProvider({ children }: { children: ReactNode }) {
           ))}
         </AnimatePresence>
       </div>
+
+      {/* Reusable Sex Education & Condom Hub Modal */}
+      {sexEdOpen && (
+        <AgeGate
+          forceOpen={sexEdOpen}
+          onCloseForce={() => setSexEdOpen(false)}
+          initialTab={sexEdTab}
+        />
+      )}
     </AppCtx.Provider>
   )
 }

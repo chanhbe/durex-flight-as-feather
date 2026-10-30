@@ -415,7 +415,7 @@ export function Guides() {
   const t = useT(T)
   const { lang } = useLang()
   useTitle(t.title)
-  const { openShare } = useApp()
+  const { openShare, openSexEd } = useApp()
   const [cat, setCat] = useState<Category>('all')
   const [reading, setReading] = useState<Article | null>(null)
   const [quiz, setQuiz] = useState(false)
@@ -440,6 +440,49 @@ export function Guides() {
         <p className="mt-2.5 max-w-md text-body-md font-medium text-white/95 drop-shadow-[0_2px_8px_rgba(0,35,75,0.3)] md:text-body-lg">
           {t.lead}
         </p>
+      </section>
+
+      {/* Sex Ed & Condoms 101 Spotlight Banner */}
+      <section className="overflow-hidden rounded-[28px] border border-white/80 bg-gradient-to-r from-white/90 via-[#fff0f3]/90 to-white/90 p-5 shadow-cloud backdrop-blur-2xl md:p-6">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-5">
+          <div className="flex items-start gap-4">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-tr from-crimson to-[#ff3366] text-white shadow-crimson">
+              <Icon name="school" className="text-2xl" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="rounded-full bg-crimson/15 px-2.5 py-0.5 text-[10.5px] font-extrabold uppercase tracking-wider text-crimson">
+                  {lang === 'vi' ? 'Chuyên đề Giáo Dục Giới Tính' : 'Sex Education Special'}
+                </span>
+                <span className="text-[11px] font-semibold text-on-surface-variant/70">BU · NIH · Durex NZ</span>
+              </div>
+              <h3 className="mt-1 font-display text-lg font-bold text-primary md:text-xl">
+                {lang === 'vi' ? 'Condoms 101 & Giải Mã 5 Lầm Tưởng Tình Dục' : 'Condoms 101 & 5 Sexual Health Myths Debunked'}
+              </h3>
+              <p className="mt-1 text-xs text-on-surface-variant max-w-xl leading-relaxed sm:text-sm">
+                {lang === 'vi'
+                  ? 'Trang bị kiến thức khoa học chuẩn y tế về 4 bước đeo bao cao su, sự đồng thuận tự nguyện F.R.I.E.S và giải mã các ngộ nhận phổ biến.'
+                  : 'Explore clinical insights on the 4 golden steps of condom use, F.R.I.E.S consent principles, and debunked sexual health myths.'}
+              </p>
+            </div>
+          </div>
+          <div className="flex shrink-0 flex-wrap gap-2.5">
+            <button
+              onClick={() => openSexEd('condoms101')}
+              className="inline-flex items-center gap-1.5 rounded-full bg-crimson px-4 py-2 text-xs font-bold text-white shadow-crimson transition-all hover:brightness-110 active:scale-95"
+            >
+              <Icon name="pan_tool_alt" className="text-sm" />
+              <span>{lang === 'vi' ? 'Xem Condoms 101' : 'Condoms 101'}</span>
+            </button>
+            <button
+              onClick={() => openSexEd('myths')}
+              className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-white px-4 py-2 text-xs font-bold text-primary shadow-sm transition-all hover:bg-primary/5 active:scale-95"
+            >
+              <Icon name="science" className="text-sm" />
+              <span>{lang === 'vi' ? '5 Lầm Tưởng' : '5 Myths'}</span>
+            </button>
+          </div>
+        </div>
       </section>
 
       {/* Category Filter Pills Bar */}
