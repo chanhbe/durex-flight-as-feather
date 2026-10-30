@@ -3,13 +3,7 @@ import { AnimatePresence, motion } from 'motion/react'
 import { DurexLogo, Icon } from './ui'
 import { useLang, type Lang } from '../i18n'
 import { Feather, HeartBalloon, RoundBalloon } from './Balloons'
-import {
-  EDU_ARTICLES,
-  MYTHS_DATA,
-  CONSENT_FRIES,
-  CONDOM_STEPS,
-  type EduArticle,
-} from '../data/sexEducation'
+import type { EduArticle } from '../data/sexEducation'
 
 export const AGE_KEY = 'durex-age-ok'
 
@@ -45,10 +39,60 @@ export function LangSwitchGate() {
   )
 }
 
+const CARDS_DATA = [
+  {
+    id: 'condoms101',
+    badge: { vi: 'Durex New Zealand', en: 'Durex New Zealand' },
+    icon: 'pan_tool_alt',
+    tint: 'from-crimson/20 via-[#ff4d6d]/10 to-transparent border-crimson/30',
+    iconColor: 'text-crimson bg-crimson/20',
+    title: {
+      vi: 'Condoms 101: 4 Bước Dùng Chuẩn Xác',
+      en: 'Condoms 101: 4 Golden Steps',
+    },
+    summary: {
+      vi: 'Nắm vững 4 bước vàng: xé nhẹ mép gói bằng tay, bóp núm đuổi không khí, vuốt đều xuống tận gốc và giữ mép rút ra ngay sau xuất tinh để đạt hiệu quả bảo vệ 98%.',
+      en: 'Master the 4 golden steps: tear foil gently by hand, pinch tip to release air, roll smoothly to base, and hold rim after ejaculation for 98% protection.',
+    },
+    sourceUrl: 'https://www.durex.co.nz/explore-sex/condoms-101/',
+  },
+  {
+    id: 'myths',
+    badge: { vi: 'Boston University (BU Today)', en: 'Boston University (BU Today)' },
+    icon: 'science',
+    tint: 'from-[#0070f3]/20 via-[#00c6ff]/10 to-transparent border-[#0070f3]/30',
+    iconColor: 'text-[#8cc8ff] bg-[#0070f3]/20',
+    title: {
+      vi: '5 Lầm Tưởng Về Sức Khỏe Tình Dục',
+      en: '5 Sexual Health Myths Debunked',
+    },
+    summary: {
+      vi: 'Bác sĩ giải mã: xuất tinh ngoài vẫn có nguy cơ mang thai và lây STIs, tinh trùng sống tới 5 ngày trong âm đạo, và tuyệt đối không bao giờ đeo cùng lúc 2 bao cao su.',
+      en: 'Clinicians debunk myths: withdrawal does not prevent STIs, sperm survives up to 5 days during periods, and double-bagging causes dangerous friction tears.',
+    },
+    sourceUrl: 'https://www.bu.edu/articles/2024/sexual-health-myths-debunked/',
+  },
+  {
+    id: 'consent',
+    badge: { vi: 'Viện Y Tế Hoa Kỳ (PMC / NCBI)', en: 'NIH / PMC / NCBI' },
+    icon: 'handshake',
+    tint: 'from-[#ffd166]/20 via-[#ffb703]/10 to-transparent border-[#ffd166]/30',
+    iconColor: 'text-[#ffd166] bg-[#ffd166]/20',
+    title: {
+      vi: 'Đồng Thuận (Consent) & Ranh Giới Cá Nhân',
+      en: 'Consent & Setting Boundaries',
+    },
+    summary: {
+      vi: 'Đồng thuận phải là sự tự nguyện hào hứng (F.R.I.E.S); im lặng hay không phản kháng không phải là đồng ý, và bạn luôn có toàn quyền từ chối hoặc nói dừng lại bất kỳ lúc nào.',
+      en: 'Consent must be affirmative and freely given (F.R.I.E.S); silence is never consent, and you always hold the absolute right to set boundaries and say no.',
+    },
+    sourceUrl: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC10195043/',
+  },
+]
+
 export function AgeGate({
   forceOpen,
   onCloseForce,
-  initialTab = 'condoms101',
 }: {
   forceOpen?: boolean
   onCloseForce?: () => void
@@ -66,14 +110,11 @@ export function AgeGate({
     }
   })
 
-  const [activeTab, setActiveTab] = useState<EduArticle['id']>(initialTab)
-
   useEffect(() => {
     if (forceOpen) {
       setState('edu')
-      if (initialTab) setActiveTab(initialTab)
     }
-  }, [forceOpen, initialTab])
+  }, [forceOpen])
 
   useEffect(() => {
     if (state === 'ok') return
@@ -165,7 +206,7 @@ export function AgeGate({
                 </div>
 
                 <h2 id="age-title" className="mt-6 font-display text-2xl font-black tracking-tight text-white sm:text-3xl">
-                  {isVi ? 'Xác Nhận Độ Tuổi Của Bạn' : 'Age Verification'}
+                  {isVi ? 'Xác Nhận Độ Tuổi' : 'Age Verification'}
                 </h2>
 
                 <p className="mt-3 text-sm text-white/85 leading-relaxed sm:text-base">
@@ -181,7 +222,7 @@ export function AgeGate({
                     autoFocus
                     className="group relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-full bg-gradient-to-r from-[#ff2a54] via-crimson to-[#b50a12] py-4 text-base font-bold tracking-wide text-white shadow-crimson transition-all duration-300 hover:brightness-110 active:scale-95"
                   >
-                    <span>{isVi ? 'Tôi đã đủ 18 tuổi (Vào Website)' : 'I am 18 or older (Enter Website)'}</span>
+                    <span>{isVi ? 'Tôi đã đủ 18 tuổi' : 'I am 18 or older (Enter Website)'}</span>
                     <Icon name="arrow_forward" className="text-xl transition-transform group-hover:translate-x-1.5" />
                   </button>
 
@@ -202,14 +243,14 @@ export function AgeGate({
                 </div>
               </motion.div>
             ) : (
-              /* SCREEN 2: Comprehensive Sex Education & Condom Guide */
+              /* SCREEN 2: 3 Small Cards for Sex Education & Condom Guide */
               <motion.div
                 key="edu"
                 initial={{ scale: 0.94, opacity: 0, y: 30 }}
                 animate={{ scale: 1, opacity: 1, y: 0 }}
                 exit={{ scale: 0.95, opacity: 0, y: -20 }}
                 transition={{ type: 'spring', damping: 28, stiffness: 280 }}
-                className="relative my-6 max-h-[92vh] w-full max-w-4xl overflow-hidden rounded-[32px] border border-white/20 bg-[#07192f]/85 text-white shadow-2xl backdrop-blur-3xl ring-1 ring-white/30 flex flex-col"
+                className="relative my-auto w-full max-w-4xl overflow-hidden rounded-[32px] border border-white/20 bg-[#07192f]/90 text-white shadow-2xl backdrop-blur-3xl ring-1 ring-white/30 flex flex-col"
               >
                 {/* Specular Rim */}
                 <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent" />
@@ -242,293 +283,70 @@ export function AgeGate({
                         ? 'Cẩm Nang An Toàn Tình Dục & Hướng Dẫn Sử Dụng Condom'
                         : 'Youth Sexual Health Guide & Condom Masterclass'}
                     </h2>
-                    <p className="mt-1 text-xs text-white/80 sm:text-sm leading-relaxed">
+                    <p className="mt-1 text-xs text-white/80 sm:text-sm leading-relaxed max-w-2xl">
                       {isVi
                         ? 'Dù bạn chưa đủ 18 tuổi, việc trang bị kiến thức khoa học về giới tính, sức khỏe sinh sản, sự đồng thuận và cách dùng bao cao su chuẩn xác là điều vô cùng quan trọng để tự bảo vệ chính mình.'
                         : 'Regardless of age, mastering accurate sexual health knowledge, consent, and correct condom usage is essential for protecting yourself and your future.'}
                     </p>
                   </div>
-
-                  {/* 3 Interactive Topic Tabs */}
-                  <div className="no-scrollbar mt-4 flex gap-2 overflow-x-auto pb-1">
-                    {(Object.keys(EDU_ARTICLES) as EduArticle['id'][]).map((tabKey) => {
-                      const item = EDU_ARTICLES[tabKey]
-                      const isActive = activeTab === tabKey
-                      const iconName =
-                        tabKey === 'condoms101'
-                          ? 'pan_tool_alt'
-                          : tabKey === 'myths'
-                          ? 'science'
-                          : 'handshake'
-
-                      return (
-                        <button
-                          key={tabKey}
-                          onClick={() => setActiveTab(tabKey)}
-                          className={`flex shrink-0 items-center gap-2 rounded-full px-4 py-2 text-xs font-bold transition-all sm:text-sm ${
-                            isActive
-                              ? 'bg-gradient-to-r from-crimson to-[#e51b24] text-white shadow-crimson'
-                              : 'border border-white/10 bg-white/10 text-white/75 hover:bg-white/15 hover:text-white'
-                          }`}
-                        >
-                          <Icon name={iconName} className="text-base" />
-                          <span>{item.badge[lang]}</span>
-                        </button>
-                      )
-                    })}
-                  </div>
                 </div>
 
-                {/* Modal Body: Scrollable Article Content */}
-                <div className="overflow-y-auto px-6 py-6 sm:px-8 space-y-6">
-                  {/* Active Article Intro Banner */}
-                  <div className="rounded-2xl border border-white/15 bg-white/5 p-4 sm:p-5">
-                    <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-white/60">
-                      <span className="font-semibold text-[#8cc8ff]">
-                        {EDU_ARTICLES[activeTab].sourceOrg}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Icon name="schedule" className="text-sm" />
-                        {EDU_ARTICLES[activeTab].readTime[lang]}
-                      </span>
-                    </div>
-
-                    <h3 className="mt-2 text-lg font-bold text-white sm:text-xl">
-                      {EDU_ARTICLES[activeTab].title[lang]}
-                    </h3>
-                    <p className="mt-1 text-sm text-white/80 leading-relaxed">
-                      {EDU_ARTICLES[activeTab].subtitle[lang]}
-                    </p>
-
-                    <div className="mt-3 flex items-center justify-between border-t border-white/10 pt-3 text-xs">
-                      <span className="text-white/65">
-                        {isVi ? 'Nguồn tài liệu chính thức:' : 'Official Reference:'}
-                      </span>
-                      <a
-                        href={EDU_ARTICLES[activeTab].sourceUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex items-center gap-1 font-semibold text-[#8cc8ff] transition-colors hover:text-white hover:underline"
+                {/* Modal Body: 3 Small Cards Grid */}
+                <div className="p-6 sm:p-8">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {CARDS_DATA.map((card) => (
+                      <div
+                        key={card.id}
+                        className={`group flex flex-col justify-between rounded-2xl border ${card.tint} bg-white/5 p-5 transition-all duration-300 hover:border-white/30 hover:bg-white/10 hover:shadow-xl`}
                       >
-                        <span>{isVi ? 'Đọc bài báo gốc' : 'Read original article'}</span>
-                        <Icon name="open_in_new" className="text-xs" />
-                      </a>
-                    </div>
+                        <div>
+                          {/* Card Icon & Source Badge */}
+                          <div className="flex items-center justify-between gap-2">
+                            <span className={`flex h-9 w-9 items-center justify-center rounded-xl ${card.iconColor} shadow-sm`}>
+                              <Icon name={card.icon} className="text-lg" />
+                            </span>
+                            <span className="text-[11px] font-semibold text-white/60 truncate">
+                              {card.badge[lang]}
+                            </span>
+                          </div>
+
+                          {/* Card Title */}
+                          <h3 className="mt-3.5 font-display text-sm font-bold text-white group-hover:text-[#ff99ac] transition-colors leading-snug sm:text-base">
+                            {card.title[lang]}
+                          </h3>
+
+                          {/* 1-2 sentence Summary */}
+                          <p className="mt-2 text-xs text-white/75 leading-relaxed">
+                            {card.summary[lang]}
+                          </p>
+                        </div>
+
+                        {/* Link to Source Article */}
+                        <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between">
+                          <a
+                            href={card.sourceUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-1 text-xs font-semibold text-[#8cc8ff] transition-colors hover:text-white hover:underline"
+                          >
+                            <span>{isVi ? 'Đọc bài báo gốc' : 'Read original article'}</span>
+                            <Icon name="open_in_new" className="text-xs" />
+                          </a>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-
-                  {/* TAB 1: BOSTON UNIVERSITY - MYTHS DEBUNKED */}
-                  {activeTab === 'myths' && (
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-2 text-sm font-bold text-[#ffb4ac]">
-                        <Icon name="verified_user" />
-                        <span>{isVi ? 'Bác sĩ & Chuyên gia giải mã 5 lầm tưởng tai hại' : '5 Persistent Myths Debunked by Clinicians'}</span>
-                      </div>
-
-                      <div className="grid gap-3.5">
-                        {MYTHS_DATA.map((item, idx) => (
-                          <div
-                            key={item.id}
-                            className="rounded-2xl border border-white/10 bg-white/5 p-4 transition-all hover:border-white/20"
-                          >
-                            <div className="flex items-start gap-3">
-                              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-crimson/20 text-sm font-bold text-crimson">
-                                #{idx + 1}
-                              </span>
-                              <div className="flex-1">
-                                <h4 className="text-sm font-bold text-[#ff8097] sm:text-base">
-                                  {item.myth[lang]}
-                                </h4>
-                                <div className="mt-2 flex items-center gap-1.5 text-xs font-bold text-[#72f59e] sm:text-sm">
-                                  <Icon name="check_circle" className="text-base" />
-                                  <span>{item.fact[lang]}</span>
-                                </div>
-                                <p className="mt-2 text-xs text-white/75 leading-relaxed sm:text-sm">
-                                  {item.detail[lang]}
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-
-                      <div className="rounded-xl border border-white/10 bg-[#0070f3]/10 p-4 text-xs text-white/80 leading-relaxed sm:text-sm">
-                        <strong className="text-white">
-                          {isVi ? 'Lời khuyên từ Boston University Student Health:' : 'Advice from Boston University Health:'}
-                        </strong>{' '}
-                        {isVi
-                          ? 'Khi có bất kỳ băn khoăn nào về sức khỏe sinh sản, hãy luôn tìm đến các nguồn y khoa chính thống hoặc bác sĩ uy tín thay vì tin vào các lời đồn truyền miệng chưa được kiểm chứng.'
-                          : 'When in doubt, always seek reputable medical sources or clinical providers rather than relying on unverified myths.'}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* TAB 2: PMC / NCBI - CONSENT & BOUNDARIES */}
-                  {activeTab === 'consent' && (
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-2 text-sm font-bold text-[#a1c9ff]">
-                        <Icon name="handshake" />
-                        <span>{isVi ? 'Quy tắc vàng F.R.I.E.S về Sự Đồng Thuận Tình Dục' : 'The F.R.I.E.S Framework for Affirmative Consent'}</span>
-                      </div>
-
-                      <div className="grid gap-3 sm:grid-cols-2">
-                        {CONSENT_FRIES.map((fries) => (
-                          <div
-                            key={fries.letter}
-                            className="rounded-2xl border border-white/10 bg-white/5 p-4 transition-all hover:bg-white/10"
-                          >
-                            <div className="flex items-center gap-3">
-                              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#0070f3]/25 font-display text-lg font-black text-[#8cc8ff]">
-                                {fries.letter}
-                              </span>
-                              <div>
-                                <h4 className="text-sm font-bold text-white">{fries.title[lang]}</h4>
-                                <p className="text-[11px] text-white/50">{fries.word[lang]}</p>
-                              </div>
-                            </div>
-                            <p className="mt-2.5 text-xs text-white/75 leading-relaxed">
-                              {fries.desc[lang]}
-                            </p>
-                          </div>
-                        ))}
-                      </div>
-
-                      {/* Important Insight from PMC Study */}
-                      <div className="rounded-2xl border border-crimson/30 bg-crimson/10 p-4 text-xs sm:text-sm text-white/85 leading-relaxed space-y-2">
-                        <div className="flex items-center gap-2 font-bold text-[#ffa6ca]">
-                          <Icon name="warning" />
-                          <span>{isVi ? 'Bài học then chốt từ nghiên cứu y khoa NIH (PMC10195043):' : 'Key Findings from NIH PMC10195043 Study:'}</span>
-                        </div>
-                        <ul className="list-disc pl-5 space-y-1.5 text-white/80">
-                          <li>
-                            <strong>{isVi ? 'Im lặng KHÔNG phải là đồng ý:' : 'Silence is NOT consent:'}</strong>{' '}
-                            {isVi
-                              ? 'Nhiều bạn trẻ ngần ngại nói thẳng. Sự bất động, không phản kháng hoặc thở dài không bao giờ được coi là đồng ý. Cần có lời nói "Có" rõ ràng.'
-                              : 'Passivity, lack of resistance, or hesitation does not mean consent. Only an explicit affirmative yes counts.'}
-                          </li>
-                          <li>
-                            <strong>{isVi ? 'Chất kích thích và rượu bia:' : 'Alcohol and Intoxication:'}</strong>{' '}
-                            {isVi
-                              ? 'Người say xỉn hoặc mất kiểm soát theo luật pháp và y tế đều KHÔNG CÓ năng lực đưa ra sự đồng thuận hợp pháp.'
-                              : 'An intoxicated or incapacitated person legally cannot provide valid sexual consent.'}
-                          </li>
-                          <li>
-                            <strong>{isVi ? 'Quyền từ chối (Refusal Skills):' : 'The Power to Say No:'}</strong>{' '}
-                            {isVi
-                              ? 'Bạn luôn có quyền đặt ranh giới cơ thể mà không sợ mất lòng đối phương. Người thực sự yêu thương bạn sẽ luôn trân trọng quyết định của bạn.'
-                              : 'Setting boundaries protects your self-worth. A loving partner will always honor and respect your boundaries.'}
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* TAB 3: DUREX 101 - HOW TO USE CONDOMS */}
-                  {activeTab === 'condoms101' && (
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-2 text-sm font-bold text-[#72f59e]">
-                        <Icon name="verified" />
-                        <span>{isVi ? '4 Bước Vàng Đeo Bao Cao Su Chuẩn Durex (Bảo vệ 98%)' : 'The 4-Step Golden Rule to Wearing a Condom (98% Effective)'}</span>
-                      </div>
-
-                      <div className="grid gap-3.5 sm:grid-cols-2">
-                        {CONDOM_STEPS.map((step) => (
-                          <div
-                            key={step.step}
-                            className="flex flex-col justify-between rounded-2xl border border-white/10 bg-white/5 p-4 transition-all hover:border-white/20"
-                          >
-                            <div>
-                              <div className="flex items-center gap-2.5">
-                                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-crimson font-display text-sm font-bold text-white shadow-sm">
-                                  {step.step}
-                                </span>
-                                <h4 className="text-sm font-bold text-white">
-                                  {step.title[lang]}
-                                </h4>
-                              </div>
-                              <p className="mt-2.5 text-xs text-white/75 leading-relaxed sm:text-sm">
-                                {step.desc[lang]}
-                              </p>
-                            </div>
-
-                            {step.warning && (
-                              <div className="mt-3 rounded-lg border border-[#ffa6ca]/20 bg-[#ffa6ca]/10 p-2 text-[11px] text-[#ffa6ca]">
-                                ⚠️ <strong>{isVi ? 'Chú ý:' : 'Note:'}</strong> {step.warning[lang]}
-                              </div>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-
-                      {/* Golden Tips from Durex NZ */}
-                      <div className="rounded-2xl border border-white/10 bg-gradient-to-r from-white/5 to-white/10 p-4 text-xs sm:text-sm space-y-2">
-                        <h4 className="font-bold text-[#8cc8ff] flex items-center gap-2">
-                          <Icon name="lightbulb" />
-                          <span>{isVi ? 'Hai nguyên tắc vàng bổ sung từ Durex New Zealand:' : 'Two Golden Rules from Durex NZ:'}</span>
-                        </h4>
-                        <div className="grid gap-2 sm:grid-cols-2 text-white/80">
-                          <div className="rounded-xl bg-white/5 p-3">
-                            <strong className="text-white">
-                              {isVi ? '1. Chọn Gel Bôi Trơn Phù Hợp:' : '1. Choose the Right Lube:'}
-                            </strong>
-                            <p className="mt-1">
-                              {isVi
-                                ? 'Chỉ dùng gel gốc nước (water-based) hoặc gel gốc silicone. Tuyệt đối KHÔNG dùng dầu ăn, sáp Vaseline, baby oil hoặc kem dưỡng da vì dầu làm mủn cao su latex chỉ sau 60 giây.'
-                                : 'Only use water-based or silicone lubes. NEVER use cooking oil, Vaseline, or body lotions, as fats degrade latex in under 60 seconds.'}
-                            </p>
-                          </div>
-                          <div className="rounded-xl bg-white/5 p-3">
-                            <strong className="text-white">
-                              {isVi ? '2. Chọn Đúng Kích Cỡ (Size):' : '2. Right Size Matters:'}
-                            </strong>
-                            <p className="mt-1">
-                              {isVi
-                                ? 'Bao quá chật dễ gây rách, bao quá rộng dễ bị tuột. Chọn kích thước vừa vặn (52.5mm cho size tiêu chuẩn châu Á) để có độ ôm khít tự nhiên và an tâm nhất.'
-                                : 'A condom too tight can burst; one too loose can slip. Pick the snug fit that ensures natural comfort and full security.'}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
                 </div>
 
-                {/* Modal Footer: Action and THE REQUIRED SMALL TEXT LINE */}
-                <div className="border-t border-white/10 bg-white/5 px-6 py-4 sm:px-8">
-                  <div className="flex flex-col items-center justify-between gap-3 text-center sm:flex-row sm:text-left">
-                    {/* Button to confirm 18+ */}
-                    <button
-                      onClick={accept}
-                      className="inline-flex items-center gap-2 rounded-full bg-crimson px-5 py-2.5 text-xs font-bold text-white shadow-crimson transition-all hover:brightness-110 active:scale-95"
-                    >
-                      <Icon name="check" className="text-base" />
-                      <span>{isVi ? 'Tôi đã nắm rõ kiến thức · Vào Website' : 'I understand · Enter Website'}</span>
-                    </button>
-
-                    {/* THE EXACT REQUIRED FEATURE: "1 dòng nhỏ là click để tiếp tục vào website" */}
-                    <p className="text-[12px] text-white/60">
-                      {isVi ? (
-                        <span>
-                          Bạn muốn tiếp tục?{' '}
-                          <button
-                            onClick={accept}
-                            className="font-semibold text-[#8cc8ff] underline decoration-[#8cc8ff]/50 underline-offset-2 transition-colors hover:text-white hover:decoration-white"
-                          >
-                            click để tiếp tục vào website
-                          </button>
-                        </span>
-                      ) : (
-                        <span>
-                          Want to explore?{' '}
-                          <button
-                            onClick={accept}
-                            className="font-semibold text-[#8cc8ff] underline decoration-[#8cc8ff]/50 underline-offset-2 transition-colors hover:text-white hover:decoration-white"
-                          >
-                            click here to continue to the website
-                          </button>
-                        </span>
-                      )}
-                    </p>
-                  </div>
+                {/* Modal Footer: Centered Red Button Only */}
+                <div className="border-t border-white/10 bg-white/5 px-6 py-4.5 sm:px-8 flex items-center justify-center">
+                  <button
+                    onClick={accept}
+                    className="group relative flex items-center justify-center gap-2 overflow-hidden rounded-full bg-gradient-to-r from-[#ff2a54] via-crimson to-[#b50a12] px-8 py-3.5 text-sm font-bold tracking-wide text-white shadow-crimson transition-all duration-300 hover:brightness-110 active:scale-95"
+                  >
+                    <span>{isVi ? 'Tôi đã nắm rõ kiến thức · Vào Website' : 'I understand · Enter Website'}</span>
+                    <Icon name="arrow_forward" className="text-base transition-transform group-hover:translate-x-1" />
+                  </button>
                 </div>
               </motion.div>
             )}

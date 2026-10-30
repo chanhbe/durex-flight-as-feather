@@ -104,38 +104,106 @@
   --animate-ambient-breathe: ambient-breathe 6s ease-in-out infinite;
 
   @keyframes floating {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-12px); }
+
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-12px);
+    }
   }
+
   @keyframes float-soft {
-    0%, 100% { transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(-7px) rotate(1.2deg); }
+
+    0%,
+    100% {
+      transform: translateY(0) rotate(0deg);
+    }
+
+    50% {
+      transform: translateY(-7px) rotate(1.2deg);
+    }
   }
+
   @keyframes pulse-cta {
-    0%, 100% { transform: scale(1); filter: drop-shadow(0 4px 14px rgba(229, 27, 36, 0.4)); }
-    50% { transform: scale(1.03); filter: drop-shadow(0 8px 24px rgba(229, 27, 36, 0.6)); }
+
+    0%,
+    100% {
+      transform: scale(1);
+      filter: drop-shadow(0 4px 14px rgba(229, 27, 36, 0.4));
+    }
+
+    50% {
+      transform: scale(1.03);
+      filter: drop-shadow(0 8px 24px rgba(229, 27, 36, 0.6));
+    }
   }
+
   @keyframes shimmer {
-    0% { transform: translateX(-150%) skewX(-14deg); }
-    50%, 100% { transform: translateX(250%) skewX(-14deg); }
+    0% {
+      transform: translateX(-150%) skewX(-14deg);
+    }
+
+    50%,
+    100% {
+      transform: translateX(250%) skewX(-14deg);
+    }
   }
+
   @keyframes marquee {
-    from { transform: translateX(-50%); }
-    to { transform: translateX(0); }
+    from {
+      transform: translateX(-50%);
+    }
+
+    to {
+      transform: translateX(0);
+    }
   }
+
   @keyframes drift {
-    from { transform: translateX(-35vw); }
-    to { transform: translateX(135vw); }
+    from {
+      transform: translateX(-35vw);
+    }
+
+    to {
+      transform: translateX(135vw);
+    }
   }
+
   @keyframes feather-sway {
-    0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); }
-    25% { transform: translateY(12px) translateX(-8px) rotate(8deg); }
-    50% { transform: translateY(22px) translateX(6px) rotate(-6deg); }
-    75% { transform: translateY(10px) translateX(-4px) rotate(4deg); }
+
+    0%,
+    100% {
+      transform: translateY(0) translateX(0) rotate(0deg);
+    }
+
+    25% {
+      transform: translateY(12px) translateX(-8px) rotate(8deg);
+    }
+
+    50% {
+      transform: translateY(22px) translateX(6px) rotate(-6deg);
+    }
+
+    75% {
+      transform: translateY(10px) translateX(-4px) rotate(4deg);
+    }
   }
+
   @keyframes ambient-breathe {
-    0%, 100% { opacity: 0.4; transform: scale(1); }
-    50% { opacity: 0.65; transform: scale(1.06); }
+
+    0%,
+    100% {
+      opacity: 0.4;
+      transform: scale(1);
+    }
+
+    50% {
+      opacity: 0.65;
+      transform: scale(1.06);
+    }
   }
 }
 
@@ -180,6 +248,7 @@ body {
   font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
   user-select: none;
 }
+
 .icon-fill {
   font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
 }
@@ -223,7 +292,10 @@ body {
 
 @utility no-scrollbar {
   scrollbar-width: none;
-  &::-webkit-scrollbar { display: none; }
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 @utility text-sky-shadow {
@@ -246,13 +318,17 @@ body {
 .cta-pulse {
   animation: var(--animate-pulse-cta);
 }
+
 .cta-pulse:active {
   animation: none;
   transform: scale(0.96);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
