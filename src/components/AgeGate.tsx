@@ -21,9 +21,8 @@ export function LangSwitchGate() {
           role="radio"
           aria-checked={lang === l}
           onClick={() => setLang(l)}
-          className={`relative z-10 rounded-full px-2.5 py-1 uppercase transition-colors duration-200 ${
-            lang === l ? 'text-white' : 'text-white/80 hover:text-white'
-          }`}
+          className={`relative z-10 rounded-full px-2.5 py-1 uppercase transition-colors duration-200 ${lang === l ? 'text-white' : 'text-white/80 hover:text-white'
+            }`}
         >
           {lang === l && (
             <motion.span
@@ -222,7 +221,7 @@ export function AgeGate({
                     autoFocus
                     className="group relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-full bg-gradient-to-r from-[#ff2a54] via-crimson to-[#b50a12] py-4 text-base font-bold tracking-wide text-white shadow-crimson transition-all duration-300 hover:brightness-110 active:scale-95"
                   >
-                    <span>{isVi ? 'Tôi đã đủ 18 tuổi' : 'I am 18 or older (Enter Website)'}</span>
+                    <span>{isVi ? 'Tôi đã đủ 18 tuổi' : 'I am 18 or older'}</span>
                     <Icon name="arrow_forward" className="text-xl transition-transform group-hover:translate-x-1.5" />
                   </button>
 
